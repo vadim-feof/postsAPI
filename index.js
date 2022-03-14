@@ -8,9 +8,16 @@ const DB_URL = `mongodb+srv://root:root@mycluster.mcpuf.mongodb.net/myFirstDatab
 
 const app = express()
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
 app.use(express.json()) // express по умолчанию не преобразует json
 app.use(express.static('static'))
 app.use(fileUpload({}))
+
 app.use('/api', PostRouter)
 
 async function startApp() {
