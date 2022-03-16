@@ -2,15 +2,18 @@ import Post from "../models/Post.js";
 import FileService from "./FileService.js";
 
 class PostService {
-    async create(post, picture) {
-        const fileName = FileService.saveFile(picture)
-        const createdPost = await Post.create({...post, picture: fileName})
+    async create(post) {
+        //const fileName = FileService.saveFile(picture)
+        const createdPost = await Post.create({...post}) // , picture: fileName
         return createdPost
     }
 
-    async getAll() {
-        const posts = await Post.find()
-        return posts
+    async getAll(limit = 10, page = 1) {
+        if (limit === '-1')
+            limit = 0
+        const totalCount = await Post.find().count()
+        const posts = await Post.find().skip(limit*(page-1)).limit(limit)
+        return [posts, totalCount]
     }
 
     async getById(id) {

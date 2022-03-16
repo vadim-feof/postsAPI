@@ -3,7 +3,7 @@ import PostService from "../services/PostService.js";
 class postController {
     async create(req, res) {
         try {
-            const post = await PostService.create(req.body, req.files.picture)
+            const post = await PostService.create(req.body) // , req.files.picture
             return res.json(post)
         } catch (e) {
             res.status(500).json(e)
@@ -12,7 +12,9 @@ class postController {
 
     async getAll(req, res) {
         try {
-            const posts = await PostService.getAll()
+            const {_limit, _page} = req.query
+            const [posts, totalCount] = await PostService.getAll(_limit, _page)
+            res.header('X-Total-Count', totalCount)
             return res.json(posts)
         } catch (e) {
             res.status(500).json(e)
