@@ -15,6 +15,10 @@ class AuthService {
         return User.findOne({username});
     }
 
+    async getUserById(_id) {
+        return User.findOne({_id});
+    }
+
     async getUserRole() {
         return Role.findOne({value: 'USER'});
     }

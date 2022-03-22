@@ -6,7 +6,7 @@ import AuthService from "../services/AuthService.js";
 
 function generateAccessToken(id, roles) {
     const payload = {
-        id, roles
+        _id: id, roles
     }
     return jwt.sign(payload, config.secretAccessKey, {expiresIn: "24h"}, undefined)
 }
@@ -49,10 +49,22 @@ class AuthController {
                 return res.status(400).json({ message: 'Wrong password'})
 
             const token = generateAccessToken(user._id, user.roles)
-            res.json({token})
+            res.json({token, username})
         } catch (e) {
             console.log(e)
             res.status(400).json({ message: "Authorisation error"})
+        }
+    }
+
+    async auth(req, res) {
+        try {
+            const user = await AuthService.getUserById(req.user._id)
+
+            const token = generateAccessToken(req.user._id, req.user.roles)
+            res.json({token, username: user.username})
+        } catch (e) {
+            console.log(e)
+            res.status(401).json({ message: "Authorisation error"})
         }
     }
 

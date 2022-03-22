@@ -13,6 +13,7 @@ AuthRouter.post('/registration', [
         .isLength({min: 4, max: 10})
 ],UserController.registration)
 AuthRouter.post('/login', UserController.login)
+AuthRouter.get('/auth', authMiddleware, UserController.auth)
 AuthRouter.get('/users', roleMiddleware(["ADMIN"]), UserController.getUsers)
 AuthRouter.get('/users/:id', authMiddleware, UserController.getById)
 
