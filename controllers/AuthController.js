@@ -46,13 +46,13 @@ class AuthController {
 
             const checkPassword = bcrypt.compareSync(password, user.password)
             if (!checkPassword)
-                return res.status(400).json({ message: 'Wrong password'})
+                return res.status(400).json({ message: 'Invalid password'})
 
             const token = generateAccessToken(user._id, user.roles)
             res.json({token, username})
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: "Authorisation error"})
+            res.status(400).json({ message: "Authorization error"})
         }
     }
 
@@ -63,8 +63,7 @@ class AuthController {
             const token = generateAccessToken(req.user._id, req.user.roles)
             res.json({token, username: user.username})
         } catch (e) {
-            console.log(e)
-            res.status(401).json({ message: "Authorisation error"})
+            res.status(401).json({ message: "Authorization error"})
         }
     }
 
