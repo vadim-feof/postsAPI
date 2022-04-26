@@ -42,11 +42,11 @@ class AuthController {
             const {username, password} = req.body
             const user = await AuthService.getUserByUsername(username)
             if (!user)
-                return res.status(400).json({ message: `Username ${username} not exist`})
+                return res.status(400).json({ message: `Пользователь ${username} не существует`})
 
             const checkPassword = bcrypt.compareSync(password, user.password)
             if (!checkPassword)
-                return res.status(400).json({ message: 'Invalid password'})
+                return res.status(400).json({ message: 'Проверьте логин или пароль'})
 
             const token = generateAccessToken(user._id, user.roles)
             res.json({token, username})
@@ -63,7 +63,7 @@ class AuthController {
             const token = generateAccessToken(req.user._id, req.user.roles)
             res.json({token, username: user.username})
         } catch (e) {
-            res.status(401).json({ message: "Authorization error"})
+            res.status(401).json({ message: "Пожалуйста авторизируйтесь"})
         }
     }
 
